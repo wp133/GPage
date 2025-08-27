@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+             <li class="{{ 'error' if category == 'error' else 'success' }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if username %}
+        <h2>Witaj, {{ username }}!</h2>
+        <a href="{{ url_for('logout') }}">Wyloguj się</a>
+
+        <h3>Wyślij plik CSV</h3>
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <button type="submit">Wyślij</button>
+        </form>
+    {% else %}
+        <h2>Witaj, gościu!</h2>
+        <a href="{{ url_for('login') }}">Zaloguj się</a>
+    {% endif %}
+</body>
+</html>
